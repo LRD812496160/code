@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 指向DAO接口，做DAO实现 -->
+<mapper namespace="com.zs.pms.dao.ArticleDao">
+	
+	<resultMap type="Tarticle" id="articlemap">
+	
+		<!-- 
+			一对一关联
+			property：属性名
+			column：	关联的字段名
+			select:	关联执行的SQL名称
+			执行完SQL返回的对象赋值给属性sals
+		 -->
+		<association property="channel" column="channel" select="getChannel"/>
+		 
+	</resultMap>
+	
+	 
+	<!-- 关联执行的SQL:取栏目 -->
+	<select id="getChannel" parameterType="int" resultType="TChan">
+		select * from tchannel where id=#{channel}
+	</select>
+	
+	<!-- 1.通过条件查询 -->
+	<select id="queryByCon" parameterType="QueryArticle" resultType="Tarticle">
+		<!-- 调用SQL片段 -->
+		
+				<include refid="selector" />
+				<include refid="where" />
+				<include refid="order" />
+	</select>
+
+	<!-- 2.查询分页 -->
+	<select id="queryByPage" parameterType="QueryArticle" resultMap="articlemap">
+		<!-- 调用SQL片段 -->
+		select * from
+			(select rownum rn,t.*
+				from(
+				<include refid="selector" />
+				<include refid="where" />
+				<include refid="order" />
+				)t)t1 
+				<include refid="page" />
+		
+	</select>
+
+	<!-- SQL片段 -->
+	<!-- 查什么 -->
+	<sql id="selector">
+		select * from tarticle
+	</sql>
+	<!-- 查询条件 -->
+	<sql id="where">
+		<where>	<!-- 自动判断：无条件时不写where、一个条件没有and -->
+		<!-- 判断字符串 -->
+		<if test="title!=null and title!=''">
+			and title=#{title}
+		</if>
+		
+		<!-- 判断数字 -->
+		<if test="ishot!=0">
+			and ishot=#{ishot}
+		</if>
+		</where>
+	
+	</sql>
+
+	<!-- 排序 -->
+	<sql id="order">
+		order by id desc
+	</sql>
+
+	<!-- 分页
+		大于号、小于号进行转义
+		>:&gt;
+		<:&lt;
+	 -->
+	 <sql id="page">
+	 	<where>
+	 		<if test="start!=0">
+	 			and rn&gt;=#{start}
+	 		</if>
+	 		<if test="end!=0">
+	 			and rn&lt;=#{end}
+	 		</if>
+	 	</where>
+	 </sql>
+
+
+	<!-- 3.根据主键查询 -->
+	<select id="queryById" parameterType="int" resultMap="articlemap">
+		select * from tarticle where id=#{id}
+	</select>
+	
+	<!-- 4.批量删除 -->
+	<delete id="deleteByIds">
+		delete from tarticle where id in
+		
+		<foreach collection="array" item="id" separator="," open="(" close=")" >
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- 5.修改 -->
+	<update id="update" parameterType="TArticle">
+		update tarticle 
+		<set>
+			<!-- 去掉最后一个， -->
+			<trim suffixOverrides=",">
+				<if test="title!=null and title!=''">
+					title=#{title},
+				</if>
+				<if test="content!=null and content!=''">
+					content=#{content},
+				</if>
+				<if test="updator!=null and updator!=''">
+					updator=#{updator},
+				</if>
+				<if test="channel!=null">
+					channel=#{channel.id}, <!-- 取id -->
+				</if>
+				
+				<if test="isremod!=0">
+					isremod=#{isremod},
+				</if>
+				<if test="ishot!=0">
+					ishot=#{ishot},
+				</if>
+				uptime=sysdate,
+			</trim>
+		</set> 
+		where id=#{id}
+	</update>
+	
+	<!-- 6.新增 -->
+	<insert id="insert" parameterType="TArticle">
+		<!-- 主键 -->
+		<selectKey keyProperty="id" order="BEFORE" resultType="int">
+			select seq_tarticle.nextval from dual
+		</selectKey>
+		insert into tarticle(id,title,content,creator,ctime,channel,isremod,ishot)		
+		values(#{id},#{title},#{content},#{creator},sysdate,#{channel.id},#{isremod},#{ishot})
+	</insert>
+
+	<!-- 7.删除一条 -->
+	<delete id="delete">
+		delete from tarticle where id=#{id}
+	</delete>
+	
+	<!-- 8.查询总数 -->
+	<select id="queryCount" parameterType="QueryArticle" resultType="int">
+		select count(1) from tarticle
+		<include refid="where"/>
+	</select>
+
+
+
+
+
+
+
+
+
+</mapper>

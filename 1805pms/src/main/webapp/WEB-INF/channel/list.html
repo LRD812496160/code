@@ -1,0 +1,167 @@
+
+
+<link href="../res/lecheng/css/admin.css" rel="stylesheet" type="text/css"/>
+<link href="../res/common/css/theme.css" rel="stylesheet" type="text/css"/>
+<link href="../res/common/css/jquery.validate.css" rel="stylesheet" type="text/css"/>
+<link href="../res/common/css/jquery.treeview.css" rel="stylesheet" type="text/css"/>
+<link href="../res/common/css/jquery.ui.css" rel="stylesheet" type="text/css"/>
+
+<!-- <script src="/thirdparty/ckeditor/ckeditor.js" type="text/javascript"></script> -->
+<!-- <script src="/thirdparty/My97DatePicker/WdatePicker.js" type="text/javascript"></script> -->
+<script type="text/javascript" src="../res/fckeditor/fckeditor.js"></script>
+<script src="../res/common/js/jquery.js" type="text/javascript"></script>
+<script src="../res/common/js/jquery.ext.js" type="text/javascript"></script>
+<script src="../res/common/js/jquery.form.js" type="text/javascript"></script>
+<script src="../res/common/js/lecheng.js" type="text/javascript"></script>
+<script src="../res/lecheng/js/admin.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../res/css/style.css" />
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>栏目列表</title>
+<meta charset="UTF-8">
+
+</script>
+</head>
+<body>
+<div class="box-positon">
+	<div class="rpos">当前位置: 栏目管理 - 列表</div>
+	<form class="ropt">
+		<input class="add" type="button" value="添加" onclick="javascript:window.location.href='add.html'"/>
+	</form>
+	<div class="clear"></div>
+</div>
+<div class="body-box">
+<form action="/admin/productList.do" method="post" style="padding-top:5px;">
+<input type="hidden" value="1" name="pageNo"/>
+栏目表: <input type="text" onkeyup="changePageNo()" value="" name="channel"/>
+	<select name="istrue">
+
+			<option value="1" selected="selected">有效</option>
+		
+			<option value="2" >无效</option>
+
+	</select>
+	
+	<input type="submit" class="query" value="查询"/>
+</form>
+<form method="post" id="tableForm">
+
+<table cellspacing="1" cellpadding="0" width="100%" border="0" class="pn-ltable">
+	<thead class="pn-lthead">
+		<tr>
+			<th width="20"><input type="checkbox" /></th>
+			<th>栏目ID</th>
+			<th width="20%">栏目表</th>
+			<th width="15%">上级栏目</th>
+			<th width="13%">级别</th>
+			<th width="13%">是否叶子</th>
+			<th width="15%">顺序</th>
+			
+		</tr>
+	</thead>
+	<tbody class="pn-ltbody">
+		
+			<tr bgcolor="#ffffff" onmouseover="this.bgColor='#eeeeee'" onmouseout="this.bgColor='#ffffff'">
+			<td><input type="checkbox" name="ids" value="297"/></td>
+			<td>     </td>
+			<td align="center">   </td>
+			<td align="center">   </td>
+			<td align="center"> </td>
+			<td align="center"> </td>
+			<td align="center"> </td>
+			
+				
+			</td>
+		</tr>
+		
+			<tr bgcolor="#ffffff" onmouseover="this.bgColor='#eeeeee'" onmouseout="this.bgColor='#ffffff'">
+			<td><input type="checkbox" name="ids" value="296"/></td>
+			<td>   </td>
+			<td align="center">     </td>
+			<td align="center"> </td>
+			<td align="center"> </td>
+			<td align="center"> </td>
+			<td align="center"> </td>
+			 
+			</td>
+		</tr>
+		
+			<tr bgcolor="#ffffff" onmouseover="this.bgColor='#eeeeee'" onmouseout="this.bgColor='#ffffff'">
+			<td><input type="checkbox" name="ids" value="295"/></td>
+			<td></td>
+			<td align="center">      </td>
+			<td align="center"> </td>
+			<td align="center"> </td>
+			<td align="center"> </td>
+			<td align="center"> </td>
+			
+			</td>
+		</tr>
+		
+			<tr bgcolor="#ffffff" onmouseover="this.bgColor='#eeeeee'" onmouseout="this.bgColor='#ffffff'">
+			<td><input type="checkbox" name="ids" value="294"/></td>
+			<td>  </td>
+			<td align="center">  </td>
+			<td align="center"> </td>
+			<td align="center"></td>
+			<td align="center"></td>
+			<td align="center"> </td>
+			
+			</td>
+		</tr>
+		
+	
+	
+		
+		
+	</tbody>
+</table>
+<div class="page pb15">
+	<span class="r inb_a page_b">
+		<!-- [当前页/尾页] -->
+		[${requestScope.currentPage}/${requestScope.pageCount}]
+		<a href="userlist.do?currentPage=1" >首页</a>
+		<c:if test="${requestScope.currentPage-1>0}">
+			<a href="userlist.do?currentPage=${requestScope.currentPage-1 }" >上一页</a>
+			<a ></a>
+		</c:if>
+		<c:if test="${requestScope.currentPage+1<requestScope.pageCount }">
+			<a href="userlist.do?currentPage=${requestScope.currentPage+1 }" >上一页</a>
+		</c:if>
+		
+		<a href="userlist.do?currentPage=${requestScope.pageCount } " >尾页</a>
+		
+			<font size=2>首页</font>
+		
+			<font size=2>上一页</font>
+		
+			<strong>1</strong>
+		
+			<a href="javascript:void(0);" onclick="javascript:window.location.href='/admin/productList.do?&pageNo=2'">2</a>
+		
+			<a href="javascript:void(0);" onclick="javascript:window.location.href='/admin/productList.do?&pageNo=3'">3</a>
+		
+			<a href="javascript:void(0);" onclick="javascript:window.location.href='/admin/productList.do?&pageNo=2'"><font size=2>下一页</font></a>
+		
+			<a href="javascript:void(0);" onclick="javascript:window.location.href='/admin/productList.do?&pageNo=3'"><font size=2>尾页</font></a>
+		
+			共<var>3</var>页 到第<input type='text' id='PAGENO'  size='3' />页 <input type='button' id='skip' class='hand btn60x20' value='确定' onclick="javascript:window.location.href = '/admin/productList.do?&pageNo=' + $('#PAGENO').val() "/>
+			
+		
+	
+	</span>
+</div>
+<div>
+<input class="del-button" type="button" value="删除" onclick="optDelete();"/></div>
+</form>
+</div>
+</body>
+</html>
